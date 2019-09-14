@@ -25,7 +25,9 @@ namespace Targets
                 $"usage: {appName} COMMAND",
                 { "h|help", "show options", arg => help = arg != null},
                 { "f|folder=", "NECESSARILY: path to folder for recursive .csproj search. ", arg => folder = arg},
-                { "c|change", "change all \"PropertyGroup\" to Import Project=\"..\\(name of your targets file)\" with calculated up one level to .csproj files, folder must be set",  arg => change = arg != null},
+                { "c|change",
+                    "change all \"PropertyGroup\" to Import Project=\"..\\(name of your targets file)\" " +
+                    "with calculated up one level for .csproj files, folder must include *.target file",  arg => change = arg != null},
                 { "i|add-import=", "REPEATABLE: add specific import row to all .csproj files",arg => imports.Add(arg)},
                 { "d|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
             };
