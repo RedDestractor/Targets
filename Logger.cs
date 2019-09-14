@@ -8,9 +8,9 @@ namespace Targets
 {
     public static class Logger
     {
-        public static void Info(string message)
+        public static void Info(string message, ConsoleColor color = ConsoleColor.Yellow)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = color;
             Console.WriteLine(message);
         }
 

@@ -14,7 +14,6 @@ namespace Targets
         {
             var appName = Assembly.GetCallingAssembly().GetName().Name;
             var folder = string.Empty;
-            var targets = string.Empty;
             var imports = new List<string>(); 
             var help = false;
             var deleteImports = false;
@@ -26,9 +25,9 @@ namespace Targets
                 $"usage: {appName} COMMAND",
                 { "h|help", "show options", arg => help = arg != null},
                 { "f|folder=", "NECESSARILY: path to folder for recursive .csproj search. ", arg => folder = arg},
-                { "c|change", "change all \"PropertyGroup\" to Import Project=\"..\\Configurations.targets\" with needed number of points to .csproj files",  arg => change = arg != null},
-                { "ai|add-import=", "add specific import row to all .csproj files",arg => imports.Add(arg)},
-                { "di|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
+                { "c|change", "change all \"PropertyGroup\" to Import Project=\"..\\(name of your targets file)\" with calculated up one level to .csproj files, folder must be set",  arg => change = arg != null},
+                { "i|add-import=", "REPEATABLE: add specific import row to all .csproj files",arg => imports.Add(arg)},
+                { "d|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
             };
             try
             {
@@ -47,9 +46,9 @@ namespace Targets
                 ShowHelp(suite);
                 return;
             }
-            if (!string.IsNullOrEmpty(folder) && change)
+            if (!string.IsNullOrEmpty(folder) && !string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)) && change)
             {
-                ChangeCommand.ChangePropertyGroupCommand(folder, targets);
+                ChangeCommand.ChangePropertyGroupCommand(folder);
                 commandCount++;
             }
             if (!string.IsNullOrEmpty(folder) && imports.Count > 0)

@@ -12,7 +12,7 @@ namespace Targets.Commands
             {
                 try
                 {
-                    Logger.Info($"{file} working...");
+                    Logger.Info($"{file} working...", ConsoleColor.White);
 
                     var project = new Project(file);
 

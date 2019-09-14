@@ -6,13 +6,13 @@ namespace Targets.Commands
 {
     public static class ChangeCommand
     {
-        public static void ChangePropertyGroupCommand(string path, string targets)
+        public static void ChangePropertyGroupCommand(string path)
         {
             foreach (var file in DirectoryHelper.GetFilesForChange(path, "*.csproj"))
             {
                 try
                 {
-                    Logger.Info($"{file} working...");
+                    Logger.Info($"{file} working...", ConsoleColor.White);
 
                     var project = new Project(file.file);
 
@@ -22,9 +22,12 @@ namespace Targets.Commands
                         Logger.Info($"Removed {property.Label}");
                     }
 
-                    project.Xml.AddImport(targets);
+                    var targetsName = DirectoryHelper.GetTargetName(path);
+                    var import = $"{string.Concat("..\\".Repeat(file.depth))}{targetsName}";
 
-                    Logger.Info($"Added Import Project=\"{"\\..".Repeat(file.depth)}\\Configurations.targets");
+                    project.Xml.AddImport(import);
+
+                    Logger.Info($"Added Import Project=\"{import}");
 
                     project.Save();
                 }

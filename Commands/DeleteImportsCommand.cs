@@ -11,14 +11,17 @@ namespace Targets.Commands
             {
                 try
                 {
-                    Logger.Info($"{file} working...");
+                    Logger.Info($"{file} working...", ConsoleColor.White);
 
                     var project = new Project(file);
 
                     foreach (var property in project.Xml.Imports)
                     {
+                        var projectImport = property.Project;
+                        var conditionImport = property.Condition;
+
                         property.Parent.RemoveChild(property);
-                        Logger.Info($"Removed {property.Label}");
+                        Logger.Info($"Removed import with project={projectImport} condition={conditionImport}");
                     }
 
                     project.Save();

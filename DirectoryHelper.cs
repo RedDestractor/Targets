@@ -73,7 +73,15 @@ namespace Targets
                 depth++;
             }
 
-            return depth;
+            return --depth;
+        }
+
+        public static string GetTargetName(string path)
+        {
+            var directory = new DirectoryInfo(path ?? Directory.GetCurrentDirectory());
+            var name = directory.GetFiles("*.targets", SearchOption.TopDirectoryOnly).FirstOrDefault()?.Name;
+
+            return name;
         }
     }
 }
