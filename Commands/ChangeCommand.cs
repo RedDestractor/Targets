@@ -19,7 +19,7 @@ namespace Targets.Commands
                     foreach (var property in project.Xml.PropertyGroups)
                     {
                         property.Parent.RemoveChild(property);
-                        Logger.Info($"Removed {property.Label}");
+                        Logger.Info($"Removed property group");
                     }
 
                     var targetsName = DirectoryHelper.GetTargetName(path);
