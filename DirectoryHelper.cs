@@ -1,51 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Targets
 {
     public static class DirectoryHelper
     {
+        public static IEnumerable<(string file, int depth)> GetFilesForChange(string path, string pattern)
+        {
+            var queue = new Queue<string>();
+
+            queue.Enqueue(path);
+
+            while (queue.Count > 0)
+            {
+                path = queue.Dequeue();
+                var depth = 0;
+
+                foreach (var subDir in Directory.GetDirectories(path))
+                {
+                    queue.Enqueue(subDir);
+                    depth = GetDepthForTarget(subDir);
+                }
+
+                var files = Directory.GetFiles(path, pattern);
+
+                if (files != null)
+                {
+                    foreach (var file in files)
+                    {
+                        yield return (file, depth);
+                    }
+                }
+            }
+        }
+
         public static IEnumerable<string> GetFiles(string path, string pattern)
         {
             var queue = new Queue<string>();
 
             queue.Enqueue(path);
+
             while (queue.Count > 0)
             {
                 path = queue.Dequeue();
-                try
+
+                foreach (var subDir in Directory.GetDirectories(path))
                 {
-                    foreach (var subDir in Directory.GetDirectories(path))
-                    {
-                        queue.Enqueue(subDir);
-                    }
+                    queue.Enqueue(subDir);
                 }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex.Message);
-                }
-                string[] files = null;
-                try
-                {
-                    files = Directory.GetFiles(path, pattern);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex.Message);
-                }
+
+                var files = Directory.GetFiles(path, pattern);
 
                 if (files != null)
                 {
-                    foreach (var t in files)
+                    foreach (var file in files)
                     {
-                        yield return t;
+                        yield return file;
                     }
                 }
             }
+        }
+
+        public static int GetDepthForTarget(string path)
+        {
+            var directory = new DirectoryInfo(path ?? Directory.GetCurrentDirectory());
+            var depth = 0;
+
+            while (directory != null && !directory.GetFiles("*.targets").Any())
+            {
+                directory = directory.Parent;
+                depth++;
+            }
+
+            return depth;
         }
     }
 }
