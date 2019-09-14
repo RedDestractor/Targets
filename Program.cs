@@ -34,38 +34,40 @@ namespace Targets
             try
             {
                 suite.Parse(args);
+
                 if (args.Length == 0)
+                {
                     throw new OptionException();
+                }
+                if (help)
+                {
+                    ShowHelp(suite);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(folder) && !string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)) && change)
+                {
+                    ChangeCommand.ChangePropertyGroupCommand(folder);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && imports.Count > 0)
+                {
+                    AddImportCommand.AddImports(folder, imports);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && deleteImports)
+                {
+                    DeleteImportsCommand.DeleteImports(folder);
+                    commandCount++;
+                }
+                if (commandCount == 0)
+                {
+                    throw new OptionException();
+                }
             }
             catch (OptionException e)
             {
                 Logger.Error(e.Message);
                 Logger.Error("Try `--help' for more information.");
-                return;
-            }
-            if (help)
-            {
-                ShowHelp(suite);
-                return;
-            }
-            if (!string.IsNullOrEmpty(folder) && !string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)) && change)
-            {
-                ChangeCommand.ChangePropertyGroupCommand(folder);
-                commandCount++;
-            }
-            if (!string.IsNullOrEmpty(folder) && imports.Count > 0)
-            {
-                AddImportCommand.AddImports(folder, imports);
-                commandCount++;
-            }
-            if (!string.IsNullOrEmpty(folder) && deleteImports)
-            {
-                DeleteImportsCommand.DeleteImports(folder);
-                commandCount++;
-            }
-            if (commandCount == 0)
-            {
-                ShowHelp(suite);
                 return;
             }
         }
