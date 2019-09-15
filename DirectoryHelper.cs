@@ -15,17 +15,17 @@ namespace Targets
             while (queue.Count > 0)
             {
                 path = queue.Dequeue();
-                var depth = 0;
+
+                var depth = GetDepthForTarget(path);
 
                 foreach (var subDir in Directory.GetDirectories(path))
                 {
                     queue.Enqueue(subDir);
-                    depth = GetDepthForTarget(subDir);
                 }
 
                 var files = Directory.GetFiles(path, pattern);
 
-                if (files != null)
+                if (files.Length > 0)
                 {
                     foreach (var file in files)
                     {
@@ -52,7 +52,7 @@ namespace Targets
 
                 var files = Directory.GetFiles(path, pattern);
 
-                if (files != null)
+                if (files.Length > 0)
                 {
                     foreach (var file in files)
                     {
@@ -73,7 +73,7 @@ namespace Targets
                 depth++;
             }
 
-            return --depth;
+            return depth;
         }
 
         public static string GetTargetName(string path)
