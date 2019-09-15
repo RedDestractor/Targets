@@ -27,7 +27,7 @@ namespace Targets
                 { "f|folder=", "NECESSARILY: path to folder for recursive .csproj search. ", arg => folder = arg},
                 { "c|change",
                     "change all \"PropertyGroup\" to Import Project=\"..\\(name of your targets file)\" " +
-                    "with calculated up one level for .csproj files, folder must include *.target file",  arg => change = arg != null},
+                    "with calculated up one level for .csproj files, folder must contain *.target file",  arg => change = arg != null},
                 { "i|add-import=", "REPEATABLE: add specific import row to all .csproj files",arg => imports.Add(arg)},
                 { "d|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
             };
@@ -44,8 +44,10 @@ namespace Targets
                     ShowHelp(suite);
                     return;
                 }
-                if (!string.IsNullOrEmpty(folder) && !string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)) && change)
+                if (!string.IsNullOrEmpty(folder) && change)
                 {
+                    if(string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)))
+                        throw new OptionException("folder must contain *.target file", "folder");
                     ChangeCommand.ChangePropertyGroupCommand(folder);
                     commandCount++;
                 }
