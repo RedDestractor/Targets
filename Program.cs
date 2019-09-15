@@ -47,8 +47,8 @@ namespace Targets
                 if (!string.IsNullOrEmpty(folder) && change)
                 {
                     if(string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)))
-                        throw new OptionException("folder must contain *.target file", "folder");
-                    ChangeCommand.ChangePropertyGroupCommand(folder);
+                        throw new OptionException("folder must contain *.target file", "change");
+                    ChangeCommand.ChangePropertyGroup(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && imports.Count > 0)
