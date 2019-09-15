@@ -8,9 +8,9 @@ using Targets.Commands;
 
 namespace Targets
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var appName = Assembly.GetCallingAssembly().GetName().Name;
             var folder = string.Empty;
@@ -74,7 +74,7 @@ namespace Targets
             }
         }
 
-        static void ShowHelp(OptionSet p)
+        private static void ShowHelp(OptionSet p)
         {
             Console.WriteLine("Targets.exe:");
             p.WriteOptionDescriptions(Console.Out);
