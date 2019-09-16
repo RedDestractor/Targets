@@ -1,9 +1,10 @@
-﻿using System;
-using Microsoft.Build.Evaluation;
+﻿using Microsoft.Build.Evaluation;
+using System;
+using System.Linq;
 
 namespace Targets.Commands
 {
-    public class DeleteImportsCommand
+    public static class DeleteReferencesCommand
     {
         public static void Invoke(string path)
         {
@@ -15,13 +16,13 @@ namespace Targets.Commands
 
                     var project = new Project(file);
 
-                    foreach (var property in project.Xml.Imports)
+                    foreach (var itemGroup in project.Xml.ItemGroups)
                     {
-                        var projectImport = property.Project;
-                        var conditionImport = property.Condition;
-
-                        property.Parent.RemoveChild(property);
-                        Logger.Info($"Removed import with project={projectImport} condition={conditionImport}");
+                        foreach (var property in itemGroup.Children.Where(p => p.GetType().GetProperty("ItemType")?.GetValue(p).ToString() == "Reference"))
+                        {
+                            itemGroup.RemoveChild(property);
+                            Logger.Info($"Removed reference");
+                        }
                     }
 
                     project.Save();

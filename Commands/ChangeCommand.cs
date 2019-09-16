@@ -6,7 +6,7 @@ namespace Targets.Commands
 {
     public static class ChangeCommand
     {
-        public static void ChangePropertyGroup(string path)
+        public static void Invoke(string path)
         {
             foreach (var file in DirectoryHelper.GetFilesForChange(path, "*.csproj"))
             {

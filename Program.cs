@@ -17,6 +17,9 @@ namespace Targets
             var imports = new List<string>(); 
             var help = false;
             var deleteImports = false;
+            var deleteReferences = false;
+            var deletePackages = false;
+            var deleteRuntimes = false;
             var change = false;
             var commandCount = 0;
 
@@ -30,6 +33,9 @@ namespace Targets
                     "with calculated up one level for .csproj files, folder must contain *.target file",  arg => change = arg != null},
                 { "i|add-import=", "REPEATABLE: add specific import row to all .csproj files",arg => imports.Add(arg)},
                 { "d|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
+                { "r|delete-references", "delete all references from .csproj files",arg => deleteReferences = arg != null},
+                { "p|delete-packages", "delete all packages from packages.config files",arg => deletePackages = arg != null},
+                { "a|delete-runtimes", "delete all runtimes from App.config files",arg => deleteRuntimes = arg != null}
             };
             try
             {
@@ -48,17 +54,32 @@ namespace Targets
                 {
                     if(string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)))
                         throw new OptionException("folder must contain *.target file", "change");
-                    ChangeCommand.ChangePropertyGroup(folder);
+                    ChangeCommand.Invoke(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && imports.Count > 0)
                 {
-                    AddImportCommand.AddImports(folder, imports);
+                    AddImportCommand.Invoke(folder, imports);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deleteImports)
                 {
-                    DeleteImportsCommand.DeleteImports(folder);
+                    DeleteImportsCommand.Invoke(folder);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && deleteReferences)
+                {
+                    DeleteReferencesCommand.Invoke(folder);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && deletePackages)
+                {
+                    DeletePackagesCommand.Invoke(folder);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && deleteRuntimes)
+                {
+                    DeleteRuntimesCommand.Invoke(folder);
                     commandCount++;
                 }
                 if (commandCount == 0)

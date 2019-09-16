@@ -6,7 +6,7 @@ namespace Targets.Commands
 {
     public static class AddImportCommand
     {
-        public static void AddImports(string path, List<string> imports)
+        public static void Invoke(string path, List<string> imports)
         {
             foreach (var file in DirectoryHelper.GetFiles(path, "*.csproj"))
             {
