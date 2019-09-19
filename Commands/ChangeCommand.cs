@@ -22,7 +22,9 @@ namespace Targets.Commands
                     {
                         if (property.Children.Count(p => (string)p.AsDynamic().Name == "OutputType" && (string)p.AsDynamic().Name == "OutputType") > 0)
                         {
-                            continue;
+                            property.Children
+                                .Where(p => (string)p.AsDynamic().Name != "OutputType" && (string)p.AsDynamic().Name != "OutputType")
+                                .ForEach(x => property.RemoveChild(x));
                         }
 
                         property.Parent.RemoveChild(property);
