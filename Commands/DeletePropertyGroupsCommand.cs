@@ -9,7 +9,7 @@ using ReflectionMagic;
 
 namespace Targets.Commands
 {
-    public static class DeletePropertyGroups
+    public static class DeletePropertyGroupsCommand
     {
         public static void Invoke(string path)
         {

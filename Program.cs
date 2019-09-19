@@ -94,7 +94,7 @@ namespace Targets
                 }
                 if (!string.IsNullOrEmpty(folder) && deletePropertyGroups)
                 {
-                    DeletePropertyGroups.Invoke(folder);
+                    DeletePropertyGroupsCommand.Invoke(folder);
                     commandCount++;
                 }
                 if (commandCount == 0)

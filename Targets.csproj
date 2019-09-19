@@ -92,7 +92,7 @@
     <Compile Include="Commands\AddImportCommand.cs" />
     <Compile Include="Commands\DeleteImportsCommand.cs" />
     <Compile Include="Commands\DeletePackagesCommand.cs" />
-    <Compile Include="Commands\DeletePropertyGroups.cs" />
+    <Compile Include="Commands\DeletePropertyGroupsCommand.cs" />
     <Compile Include="Commands\DeleteReferencesCommand.cs" />
     <Compile Include="Commands\DeleteRuntimesCommand.cs" />
     <Compile Include="Commands\DeleteTargetsCommand.cs" />
