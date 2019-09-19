@@ -20,6 +20,7 @@ namespace Targets
             var deleteReferences = false;
             var deletePackages = false;
             var deleteRuntimes = false;
+            var deleteTargets = false;
             var change = false;
             var commandCount = 0;
 
@@ -35,7 +36,8 @@ namespace Targets
                 { "d|delete-imports", "delete all imports from .csproj files",arg => deleteImports = arg != null},
                 { "r|delete-references", "delete all references from .csproj files",arg => deleteReferences = arg != null},
                 { "p|delete-packages", "delete all packages from packages.config files",arg => deletePackages = arg != null},
-                { "a|delete-runtimes", "delete all runtimes from App.config files",arg => deleteRuntimes = arg != null}
+                { "a|delete-runtimes", "delete all runtimes from App.config files",arg => deleteRuntimes = arg != null},
+                { "t|delete-targets", "delete all targets from .csproj files",arg => deleteTargets = arg != null}
             };
             try
             {
@@ -80,6 +82,11 @@ namespace Targets
                 if (!string.IsNullOrEmpty(folder) && deleteRuntimes)
                 {
                     DeleteRuntimesCommand.Invoke(folder);
+                    commandCount++;
+                }
+                if (!string.IsNullOrEmpty(folder) && deleteTargets)
+                {
+                    DeleteTargetsCommand.Invoke(folder);
                     commandCount++;
                 }
                 if (commandCount == 0)

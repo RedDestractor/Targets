@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Build.Evaluation;
 using MoreLinq;
+using ReflectionMagic;
 
 namespace Targets.Commands
 {
@@ -18,7 +20,13 @@ namespace Targets.Commands
 
                     foreach (var property in project.Xml.PropertyGroups)
                     {
+                        if (property.Children.Count(p => (string)p.AsDynamic().Name == "OutputType" && (string)p.AsDynamic().Name == "OutputType") > 0)
+                        {
+                            continue;
+                        }
+
                         property.Parent.RemoveChild(property);
+
                         Logger.Info($"Removed property group");
                     }
 
