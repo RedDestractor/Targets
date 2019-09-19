@@ -6,7 +6,7 @@ using ReflectionMagic;
 
 namespace Targets.Commands
 {
-    public static class ChangeCommand
+    public static class AddTargetsCommand
     {
         public static void Invoke(string path)
         {
@@ -17,21 +17,6 @@ namespace Targets.Commands
                     Logger.Info($"{file} working...", ConsoleColor.White);
 
                     var project = new Project(file.file);
-
-                    foreach (var property in project.Xml.PropertyGroups)
-                    {
-                        if (property.Children.Count(p => (string)p.AsDynamic().Name == "OutputType" && (string)p.AsDynamic().Name == "OutputType") > 0)
-                        {
-                            property.Children
-                                .Where(p => (string)p.AsDynamic().Name != "OutputType" && (string)p.AsDynamic().Name != "OutputType")
-                                .ForEach(x => property.RemoveChild(x));
-                        }
-
-                        property.Parent.RemoveChild(property);
-
-                        Logger.Info($"Removed property group");
-                    }
-
                     var targetsName = DirectoryHelper.GetTargetName(path);
                     var import = $"{string.Concat("..\\".Repeat(file.depth))}{targetsName}";
 

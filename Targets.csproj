@@ -92,13 +92,14 @@
     <Compile Include="Commands\AddImportCommand.cs" />
     <Compile Include="Commands\DeleteImportsCommand.cs" />
     <Compile Include="Commands\DeletePackagesCommand.cs" />
+    <Compile Include="Commands\DeletePropertyGroups.cs" />
     <Compile Include="Commands\DeleteReferencesCommand.cs" />
     <Compile Include="Commands\DeleteRuntimesCommand.cs" />
     <Compile Include="Commands\DeleteTargetsCommand.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Commands\ChangeCommand.cs" />
+    <Compile Include="Commands\AddTargetsCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
