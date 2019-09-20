@@ -23,6 +23,8 @@ namespace Targets.Commands
                     if (package.Root?.Name == "packages")
                     {
                         package.Root.Descendants().Remove();
+
+                        Logger.Info($"Removed package");
                     }
 
                     package.Save(file);

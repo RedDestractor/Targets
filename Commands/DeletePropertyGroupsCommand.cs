@@ -33,9 +33,8 @@ namespace Targets.Commands
                         else
                         {
                             property.Parent.RemoveChild(property);
+                            Logger.Info($"Removed property group");
                         }
-
-                        Logger.Info($"Removed property group");
                     }
 
                     project.Save();

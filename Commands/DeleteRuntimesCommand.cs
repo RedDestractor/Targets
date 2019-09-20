@@ -24,6 +24,8 @@ namespace Targets.Commands
                         var runtime = package.Root.Descendants().FirstOrDefault(x => x.Name == "runtime");
 
                         runtime?.Remove();
+
+                        Logger.Info($"Removed runtime");
                     }
 
                     package.Save(file);
