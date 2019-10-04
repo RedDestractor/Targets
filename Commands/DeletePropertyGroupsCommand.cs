@@ -23,13 +23,15 @@ namespace Targets.Commands
 
                     foreach (var property in project.Xml.PropertyGroups)
                     {
-                        if (property.Children.Count(p => (string) p.AsDynamic().Name == "OutputType") > 0 ||
-                            property.Children.Count(p => (string)p.AsDynamic().Name == "RootNamespace") > 0)
+                        if (property.Children.Any(p => (string) p.AsDynamic().Name == "OutputType")||
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "RootNamespace") ||
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "ProjectGuid") ||
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "NuGetPackageImportStamp"))
                         {
                             property.Children
-                                .Where(p => (string) p.AsDynamic().Name != "OutputType" || 
-                                            (string)p.AsDynamic().Name != "RootNamespace" || 
-                                            (string)p.AsDynamic().Name != "ProjectGuid" || 
+                                .Where(p => (string) p.AsDynamic().Name != "OutputType" &&
+                                            (string)p.AsDynamic().Name != "RootNamespace" && 
+                                            (string)p.AsDynamic().Name != "ProjectGuid" && 
                                             (string)p.AsDynamic().Name != "NuGetPackageImportStamp")
                                 .ForEach(x =>
                                 {
