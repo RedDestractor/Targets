@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Options;
-using Targets.Commands;
 
 namespace Targets
 {
@@ -20,7 +19,7 @@ namespace Targets
             var deletePropertyGroups = false;
             var deleteReferences = false;
             var deletePackages = false;
-            var deleteRuntimes = false;
+            var deleteRunTimes = false;
             var deleteTargets = false;
             var addTargets = false;
 
@@ -39,7 +38,7 @@ namespace Targets
                 { "g|delete-prgroups", "delete all property groups from .csproj files",arg => deletePropertyGroups = arg != null},
                 { "r|delete-references", "delete all references from .csproj files",arg => deleteReferences = arg != null},
                 { "p|delete-packages", "delete all packages from packages.config files",arg => deletePackages = arg != null},
-                { "a|delete-runtimes", "delete all runtimes from App.config files",arg => deleteRuntimes = arg != null},
+                { "a|delete-runtimes", "delete all runtimes from App.config files",arg => deleteRunTimes = arg != null},
                 { "t|delete-targets", "delete all targets from .csproj files",arg => deleteTargets = arg != null}
             };
             try
@@ -59,42 +58,42 @@ namespace Targets
                 {
                     if(string.IsNullOrEmpty(DirectoryHelper.GetTargetName(folder)))
                         throw new OptionException("folder must contain *.target file", "change");
-                    AddTargetsCommand.Invoke(folder);
+                    Commands.AddTargetsCommand(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && imports.Count > 0)
                 {
-                    AddImportCommand.Invoke(folder, imports);
+                    Commands.AddImportCommand(folder, imports);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deleteImports)
                 {
-                    DeleteImportsCommand.Invoke(folder);
+                    Commands.DeleteImportsCommand(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deleteReferences)
                 {
-                    DeleteReferencesCommand.Invoke(folder);
+                    Commands.DeleteReferencesCommand(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deletePackages)
                 {
-                    DeletePackagesCommand.Invoke(folder);
+                    Commands.DeletePackagesCommand(folder);
                     commandCount++;
                 }
-                if (!string.IsNullOrEmpty(folder) && deleteRuntimes)
+                if (!string.IsNullOrEmpty(folder) && deleteRunTimes)
                 {
-                    DeleteRuntimesCommand.Invoke(folder);
+                    Commands.DeleteRuntimesCommand(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deleteTargets)
                 {
-                    DeleteTargetsCommand.Invoke(folder);
+                    Commands.DeleteTargetsCommand(folder);
                     commandCount++;
                 }
                 if (!string.IsNullOrEmpty(folder) && deletePropertyGroups)
                 {
-                    DeletePropertyGroupsCommand.Invoke(folder);
+                    Commands.DeletePropertyGroupsCommand(folder);
                     commandCount++;
                 }
                 if (commandCount == 0)
