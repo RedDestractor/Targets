@@ -18,16 +18,16 @@ namespace Targets
                 {
                     Logger.Info($"{file} working...", ConsoleColor.White);
 
-                    var project = new Project(file);
+                    var project = XDocument.Load(file);
 
                     foreach (var import in imports)
                     {
-                        project.Xml.AddImport(import);
-
+                        XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
+                        project.Root?.AddFirst(new XElement(ns + "Import", new XAttribute("Project", $"{import}")));
                         Logger.Info($"Added Import Project=\"{import}\"");
                     }
 
-                    project.Save();
+                    project.Save(file);
                 }
                 catch (Exception e)
                 {
@@ -44,15 +44,16 @@ namespace Targets
                 {
                     Logger.Info($"{file} working...", ConsoleColor.White);
 
-                    var project = new Project(file.file);
+                    var project = XDocument.Load(file.file);
                     var targetsName = DirectoryHelper.GetTargetName(path);
                     var import = $"{string.Concat("..\\".Repeat(file.depth))}{targetsName}";
 
-                    project.Xml.AddImport(import);
+                    XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
+                    project.Root?.AddFirst(new XElement(ns + "Import", new XAttribute("Project", $"{import}")));
 
                     Logger.Info($"Added Import Project=\"{import}");
 
-                    project.Save();
+                    project.Save(file.file);
                 }
                 catch (Exception e)
                 {
@@ -130,23 +131,22 @@ namespace Targets
                         if (property.Children.Any(p => (string)p.AsDynamic().Name == "OutputType") ||
                             property.Children.Any(p => (string)p.AsDynamic().Name == "RootNamespace") ||
                             property.Children.Any(p => (string)p.AsDynamic().Name == "ProjectGuid") ||
-                            property.Children.Any(p => (string)p.AsDynamic().Name == "NuGetPackageImportStamp"))
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "NuGetPackageImportStamp") ||
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "AutoGenerateBindingRedirects") ||
+                            property.Children.Any(p => (string)p.AsDynamic().Name == "AssemblyName"))
                         {
                             property.Children
                                 .Where(p => (string)p.AsDynamic().Name != "OutputType" &&
                                             (string)p.AsDynamic().Name != "RootNamespace" &&
                                             (string)p.AsDynamic().Name != "ProjectGuid" &&
-                                            (string)p.AsDynamic().Name != "NuGetPackageImportStamp")
+                                            (string)p.AsDynamic().Name != "NuGetPackageImportStamp" &&
+                                            (string)p.AsDynamic().Name != "AutoGenerateBindingRedirects" &&
+                                            (string)p.AsDynamic().Name != "AssemblyName")
                                 .ForEach(x =>
                                 {
                                     property.RemoveChild(x);
                                     Logger.Info($"Removed property group child");
                                 });
-                        }
-                        else
-                        {
-                            property.Parent.RemoveChild(property);
-                            Logger.Info($"Removed property group");
                         }
                     }
 
